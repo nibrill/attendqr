@@ -17,7 +17,7 @@ import QRCode from 'qrcode';
 
 import { Backend } from '../../core/backend';
 import type { Attendance, ClassSession } from '../../core/models';
-import { encodePayload, toCsv } from '../../core/qr';
+import { ROTATION_SECONDS, currentStep, encodePayload, rotatingToken, toCsv } from '../../core/qr';
 import { UiService } from '../../core/ui.service';
 
 @Component({
@@ -40,13 +40,21 @@ export class ClassDetailPage {
   protected readonly attendees = signal<Attendance[]>([]);
   protected readonly qr = signal('');
   protected readonly missing = signal(false);
+  /** Segundos que faltan para que el QR cambie. */
+  protected readonly remaining = signal(ROTATION_SECONDS);
+  protected readonly rotation = ROTATION_SECONDS;
+  private step = -1;
 
   constructor() {
     addIcons({ downloadOutline, trashOutline });
     effect(() => void this.load(this.id()));
     // Actualiza la lista de asistentes mientras la pantalla está abierta.
     const timer = setInterval(() => void this.refreshAttendees(), 4000);
-    inject(DestroyRef).onDestroy(() => clearInterval(timer));
+    const clock = setInterval(() => void this.tick(), 1000);
+    inject(DestroyRef).onDestroy(() => {
+      clearInterval(timer);
+      clearInterval(clock);
+    });
   }
 
   private async load(id: string): Promise<void> {
@@ -54,14 +62,27 @@ export class ClassDetailPage {
     this.missing.set(!session);
     this.session.set(session);
     if (!session) return;
+    this.step = -1;
+    await this.tick();
+    await this.refreshAttendees();
+  }
+
+  /** Actualiza la cuenta regresiva y regenera el QR cuando cambia la ventana de tiempo. */
+  private async tick(): Promise<void> {
+    const session = this.session();
+    if (!session) return;
+    const step = currentStep();
+    this.remaining.set(ROTATION_SECONDS - (Math.floor(Date.now() / 1000) % ROTATION_SECONDS));
+    if (step === this.step) return;
+    this.step = step;
+    const code = await rotatingToken(session.code, step);
     this.qr.set(
-      await QRCode.toDataURL(encodePayload({ sessionId: session.id, code: session.code }), {
+      await QRCode.toDataURL(encodePayload({ sessionId: session.id, code }), {
         width: 480,
         margin: 2,
         errorCorrectionLevel: 'M',
       }),
     );
-    await this.refreshAttendees();
   }
 
   private async refreshAttendees(): Promise<void> {

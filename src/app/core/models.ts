@@ -18,7 +18,7 @@ export interface ClassSession {
   startsAt: string;
   /** Después de esta hora ya no se acepta asistencia (ISO 8601). */
   expiresAt: string;
-  /** Código aleatorio incluido en el QR para evitar que se adivine una sesión. */
+  /** Secreto aleatorio de la clase; de él se derivan los tokens rotativos del QR. */
   code: string;
 }
 

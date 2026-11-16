@@ -1,4 +1,4 @@
-import { decodePayload, encodePayload, randomCode, toCsv } from './qr';
+import { decodePayload, encodePayload, isValidToken, randomCode, rotatingToken, toCsv } from './qr';
 
 describe('qr', () => {
   it('codifica y decodifica el contenido del QR', () => {
@@ -13,6 +13,19 @@ describe('qr', () => {
 
   it('genera códigos de 6 caracteres válidos', () => {
     expect(randomCode()).toMatch(/^[A-Z2-9]{6}$/);
+  });
+
+  it('el token cambia en cada ventana y tolera la anterior', async () => {
+    const now = 1_700_000_000_000;
+    const current = await rotatingToken('SECRET', Math.floor(now / 20_000));
+    const previous = await rotatingToken('SECRET', Math.floor(now / 20_000) - 1);
+    const old = await rotatingToken('SECRET', Math.floor(now / 20_000) - 2);
+    expect(current).toMatch(/^[A-Z2-9]{6}$/);
+    expect(current).not.toBe(previous);
+    expect(await isValidToken('SECRET', current, now)).toBe(true);
+    expect(await isValidToken('SECRET', previous, now)).toBe(true);
+    expect(await isValidToken('SECRET', old, now)).toBe(false);
+    expect(await isValidToken('OTRO', current, now)).toBe(false);
   });
 
   it('escapa comillas en el CSV', () => {

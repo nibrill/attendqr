@@ -38,11 +38,12 @@ AttendQR elimina las listas de papel: el **docente** crea una clase y proyecta u
 
 - Roles **docente** y **estudiante**, con registro, inicio de sesión y recuperación de contraseña.
 - El docente crea clases con asignatura, sala, horario y **ventana de registro** configurable.
-- QR único por clase con código aleatorio (no se puede adivinar ni reutilizar en otra clase).
+- **QR rotativo**: el código cambia cada 20 segundos, así una foto reenviada a un compañero deja de servir.
 - Escaneo con **cámara**, desde una **imagen** o pegando el código.
 - Lista de asistentes en vivo y **exportación a CSV** (compatible con Excel).
 - Historial personal para el estudiante.
 - Una sola marca por estudiante y clase; el registro se cierra al terminar la ventana.
+- **PWA instalable**: se puede agregar a la pantalla de inicio y abre sin conexión.
 - **Modo demo** sin configuración (datos en el navegador) o **Firebase Auth + Firestore** con reglas incluidas.
 
 ### 🧱 Arquitectura
@@ -69,7 +70,7 @@ npm start
 
 Abre `http://localhost:4200`. Cuentas de ejemplo (contraseña `demo1234`): `docente@demo.cl` y `alumno@demo.cl`.
 
-**Probar el flujo completo:** inicia sesión como docente → crea una clase → copia el QR; en otra pestaña inicia sesión como estudiante → «Escanear» → sube la imagen del QR o pega el código.
+**Probar el flujo completo:** inicia sesión como docente → crea una clase → copia el QR; en otra pestaña inicia sesión como estudiante → «Escanear» → sube una captura del QR. El código rota cada 20 segundos, así que hay que escanear el que está en pantalla.
 
 ### 🔥 Usar Firebase (opcional)
 
@@ -80,6 +81,12 @@ Abre `http://localhost:4200`. Cuentas de ejemplo (contraseña `demo1234`): `doce
 ```bash
 npx firebase-tools deploy --only firestore:rules
 ```
+
+### 🔐 Cómo funciona el QR rotativo
+
+Cada clase tiene un secreto aleatorio. El QR no lo muestra: contiene un token derivado del secreto y de la ventana de tiempo actual (SHA-256), que se regenera cada 20 segundos. Al registrar asistencia se acepta solo el token vigente o el inmediatamente anterior.
+
+> **Limitación conocida:** la validación se hace en el cliente. Con Firebase, un estudiante con conocimientos técnicos podría leer el secreto de la clase desde Firestore. Para un uso real con control estricto, mueve `checkIn` a una Cloud Function y deja el secreto fuera del alcance de los estudiantes.
 
 ### 📱 App móvil
 
@@ -124,7 +131,8 @@ AttendQR replaces paper attendance sheets: the **teacher** creates a class and s
 
 - **Teacher** and **student** roles with sign up, sign in and password reset.
 - Classes with course, room, start time and a configurable **check-in window**.
-- Per-class QR with a random code; scan via **camera**, **image upload** or pasted code.
+- **Rotating QR**: the code changes every 20 seconds, so a forwarded photo stops working. Scan via **camera**, **image upload** or pasted code.
+- **Installable PWA** with offline support.
 - Live attendee list and **CSV export** (Excel-friendly).
 - Personal attendance history; one check-in per student and class.
 - **Zero-config demo mode** or **Firebase Auth + Firestore** with included security rules.

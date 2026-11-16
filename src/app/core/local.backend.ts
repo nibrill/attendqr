@@ -1,7 +1,7 @@
 import { Backend } from './backend';
 import type { Attendance, ClassSession, NewSession, Role, UserProfile } from './models';
 import { AppError } from './models';
-import { randomCode } from './qr';
+import { isValidToken, randomCode } from './qr';
 
 interface StoredUser extends UserProfile {
   passwordHash: string;
@@ -142,7 +142,10 @@ export class LocalBackend extends Backend {
 
   async checkIn(student: UserProfile, sessionId: string, code: string): Promise<Attendance> {
     const session = await this.getSession(sessionId);
-    if (!session || session.code !== code) throw new AppError('Este código QR no es válido.');
+    if (!session) throw new AppError('Este código QR no es válido.');
+    if (!(await isValidToken(session.code, code))) {
+      throw new AppError('El código QR expiró. Escanea el que se muestra ahora.');
+    }
     if (Date.now() > new Date(session.expiresAt).getTime()) throw new AppError('La clase ya cerró el registro.');
     const id = `${sessionId}_${student.uid}`;
     const all = this.attendance();

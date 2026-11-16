@@ -18,7 +18,11 @@
     @if (qr()) {
     <img [src]="qr()" alt="Código QR para registrar asistencia a {{ s.course }}" width="240" height="240" />
     }
-    <small>Proyecta este código para que los estudiantes lo escaneen.</small>
+    <div class="bar" aria-hidden="true"><span [style.width.%]="(remaining() / rotation) * 100"></span></div>
+    <small
+      >El código cambia cada {{ rotation }} s para que no sirva una foto reenviada · nuevo en {{ remaining() }}
+      s.</small
+    >
   </section>
 
   <section class="aq-card">

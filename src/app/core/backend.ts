@@ -15,8 +15,8 @@ export abstract class Backend {
   abstract createSession(teacher: UserProfile, data: NewSession): Promise<ClassSession>;
   abstract deleteSession(id: string): Promise<void>;
 
-  /** Registra la asistencia validando el código y la vigencia de la clase. */
-  abstract checkIn(student: UserProfile, sessionId: string, code: string): Promise<Attendance>;
+  /** Registra la asistencia validando el token rotativo del QR y la vigencia de la clase. */
+  abstract checkIn(student: UserProfile, sessionId: string, token: string): Promise<Attendance>;
   abstract listAttendance(sessionId: string): Promise<Attendance[]>;
   abstract listMyAttendance(studentId: string): Promise<Attendance[]>;
 }

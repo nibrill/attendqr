@@ -1,5 +1,6 @@
 import { LocalBackend } from './local.backend';
 import { AppError } from './models';
+import { currentStep, rotatingToken } from './qr';
 
 describe('LocalBackend', () => {
   let backend: LocalBackend;
@@ -20,8 +21,9 @@ describe('LocalBackend', () => {
       startsAt: inMinutes(-5),
       expiresAt: inMinutes(30),
     });
-    await backend.checkIn(student, s.id, s.code);
-    await expect(backend.checkIn(student, s.id, s.code)).rejects.toBeInstanceOf(AppError);
+    const token = await rotatingToken(s.code);
+    await backend.checkIn(student, s.id, token);
+    await expect(backend.checkIn(student, s.id, token)).rejects.toBeInstanceOf(AppError);
     expect(await backend.listAttendance(s.id)).toHaveLength(1);
   });
 
@@ -41,7 +43,23 @@ describe('LocalBackend', () => {
       expiresAt: inMinutes(-30),
     });
     await expect(backend.checkIn(student, open.id, 'AAAAAA')).rejects.toBeInstanceOf(AppError);
-    await expect(backend.checkIn(student, closed.id, closed.code)).rejects.toBeInstanceOf(AppError);
+    await expect(backend.checkIn(student, closed.id, await rotatingToken(closed.code))).rejects.toBeInstanceOf(
+      AppError,
+    );
+  });
+
+  it('rechaza un QR antiguo y el código secreto sin rotar', async () => {
+    const teacher = await backend.signIn('docente@demo.cl', 'demo1234');
+    const student = await backend.signIn('alumno@demo.cl', 'demo1234');
+    const s = await backend.createSession(teacher, {
+      course: 'Redes',
+      room: 'D-1',
+      startsAt: inMinutes(-5),
+      expiresAt: inMinutes(30),
+    });
+    const stale = await rotatingToken(s.code, currentStep() - 5);
+    await expect(backend.checkIn(student, s.id, stale)).rejects.toBeInstanceOf(AppError);
+    await expect(backend.checkIn(student, s.id, s.code)).rejects.toBeInstanceOf(AppError);
   });
 
   it('elimina los registros al borrar una clase', async () => {
@@ -53,7 +71,7 @@ describe('LocalBackend', () => {
       startsAt: inMinutes(-1),
       expiresAt: inMinutes(20),
     });
-    await backend.checkIn(student, s.id, s.code);
+    await backend.checkIn(student, s.id, await rotatingToken(s.code));
     await backend.deleteSession(s.id);
     expect(await backend.listMyAttendance(student.uid)).toEqual([]);
   });
