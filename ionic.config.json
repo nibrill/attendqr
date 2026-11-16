@@ -1,0 +1,7 @@
+{
+  "name": "attendqr",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

@@ -1,0 +1,61 @@
+<ion-header [translucent]="true"><ion-toolbar></ion-toolbar></ion-header>
+
+<ion-content>
+  <h1 class="page-title">Mis clases</h1>
+  <p class="page-subtitle">Crea una clase, proyecta el QR y los estudiantes registran su asistencia.</p>
+
+  @if (!creating()) {
+  <div class="new">
+    <ion-button expand="block" (click)="creating.set(true)">
+      <ion-icon slot="start" name="add-outline"></ion-icon>
+      Nueva clase
+    </ion-button>
+  </div>
+  } @else {
+  <form class="aq-card aq-form" [formGroup]="form" (ngSubmit)="create()" novalidate>
+    <ion-input label="Asignatura" labelPlacement="floating" fill="outline" formControlName="course"></ion-input>
+    @if (form.controls.course.touched && form.controls.course.invalid) {
+    <p class="aq-error">Ingresa el nombre de la asignatura.</p>
+    }
+    <ion-input label="Sala" labelPlacement="floating" fill="outline" formControlName="room"></ion-input>
+    @if (form.controls.room.touched && form.controls.room.invalid) {
+    <p class="aq-error">Indica la sala.</p>
+    }
+    <ion-datetime presentation="date-time" formControlName="startsAt" locale="es-CL"></ion-datetime>
+    <ion-input
+      label="Minutos para registrar asistencia"
+      labelPlacement="floating"
+      fill="outline"
+      type="number"
+      inputmode="numeric"
+      formControlName="minutes"
+    ></ion-input>
+    @if (form.controls.minutes.invalid) {
+    <p class="aq-error">Entre 1 y 240 minutos.</p>
+    }
+    <div class="row">
+      <ion-button type="button" fill="clear" color="medium" (click)="creating.set(false)">Cancelar</ion-button>
+      <ion-button type="submit">Crear y ver QR</ion-button>
+    </div>
+  </form>
+  } @if (!sessions().length) {
+  <div class="aq-empty">
+    <ion-icon name="school-outline"></ion-icon>
+    <p>Aún no tienes clases. Crea la primera para generar un código QR.</p>
+  </div>
+  } @for (s of sessions(); track s.id) {
+  <button
+    class="aq-card item"
+    type="button"
+    [attr.aria-label]="'Abrir ' + s.course"
+    (click)="router.navigate(['/app/clases', s.id])"
+  >
+    <div>
+      <strong>{{ s.course }}</strong>
+      <span>{{ s.room }} · {{ s.startsAt | date: "EEE d 'de' MMM, HH:mm" }}</span>
+    </div>
+    <span class="badge" [class.open]="isOpen(s)">{{ isOpen(s) ? 'Abierta' : 'Cerrada' }}</span>
+    <ion-icon name="chevron-forward" aria-hidden="true"></ion-icon>
+  </button>
+  }
+</ion-content>

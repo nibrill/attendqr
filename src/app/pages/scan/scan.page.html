@@ -1,0 +1,47 @@
+<ion-header [translucent]="true"><ion-toolbar></ion-toolbar></ion-header>
+
+<ion-content>
+  <h1 class="page-title">Registrar asistencia</h1>
+  <p class="page-subtitle">Escanea el código QR que proyecta tu docente.</p>
+
+  @if (result(); as r) {
+  <section class="aq-card ok">
+    <ion-icon name="checkmark-circle" aria-hidden="true"></ion-icon>
+    <h2>¡Listo, {{ r.studentName.split(' ')[0] }}!</h2>
+    <p>Tu asistencia a <strong>{{ r.course }}</strong> quedó registrada.</p>
+    <ion-button fill="outline" (click)="result.set(null)">Escanear otro</ion-button>
+  </section>
+  } @else {
+  <section class="aq-card camera">
+    <video #video [hidden]="!scanning()" playsinline muted></video>
+    @if (!scanning()) {
+    <ion-button expand="block" (click)="startCamera()">
+      <ion-icon slot="start" name="camera-outline"></ion-icon>
+      Abrir cámara
+    </ion-button>
+    } @else {
+    <ion-button expand="block" fill="outline" color="medium" (click)="stop()">Detener</ion-button>
+    }
+    <label class="upload">
+      <ion-icon name="image-outline" aria-hidden="true"></ion-icon>
+      Subir imagen con un QR
+      <input type="file" accept="image/*" hidden (change)="fromImage($event)" />
+    </label>
+  </section>
+
+  <section class="aq-card">
+    <h2>¿Sin cámara?</h2>
+    <p class="hint">Pega el texto del código (por ejemplo, <code>attendqr:…</code>).</p>
+    <ion-input
+      aria-label="Código de la clase"
+      fill="outline"
+      placeholder="attendqr:..."
+      [(ngModel)]="manualCode"
+      (keyup.enter)="submitManual()"
+    ></ion-input>
+    <ion-button expand="block" class="manual" [disabled]="!manualCode.trim()" (click)="submitManual()"
+      >Registrar</ion-button
+    >
+  </section>
+  }
+</ion-content>

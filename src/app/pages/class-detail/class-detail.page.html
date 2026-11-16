@@ -1,0 +1,52 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/app/clases" text="Clases"></ion-back-button></ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (missing()) {
+  <div class="aq-empty"><p>No encontramos esta clase.</p></div>
+  } @else if (session(); as s) {
+  <h1 class="page-title">{{ s.course }}</h1>
+  <p class="page-subtitle">
+    {{ s.room }} · {{ s.startsAt | date: "EEEE d 'de' MMMM, HH:mm" }} · {{ isOpen() ? 'Registro abierto hasta las ' +
+    (s.expiresAt | date: 'HH:mm') : 'Registro cerrado' }}
+  </p>
+
+  <section class="aq-card qr">
+    @if (qr()) {
+    <img [src]="qr()" alt="Código QR para registrar asistencia a {{ s.course }}" width="240" height="240" />
+    }
+    <small>Proyecta este código para que los estudiantes lo escaneen.</small>
+  </section>
+
+  <section class="aq-card">
+    <header class="head">
+      <h2>Asistentes ({{ attendees().length }})</h2>
+      <ion-button size="small" fill="outline" [disabled]="!attendees().length" (click)="exportCsv()">
+        <ion-icon slot="start" name="download-outline"></ion-icon>
+        CSV
+      </ion-button>
+    </header>
+    @if (!attendees().length) {
+    <p class="muted">Todavía nadie ha registrado asistencia.</p>
+    }
+    <ul>
+      @for (a of attendees(); track a.id) {
+      <li>
+        <span>{{ a.studentName }}</span>
+        <time>{{ a.checkedAt | date: 'HH:mm:ss' }}</time>
+      </li>
+      }
+    </ul>
+  </section>
+
+  <div class="danger">
+    <ion-button color="danger" fill="clear" size="small" (click)="confirmDelete()">
+      <ion-icon slot="start" name="trash-outline"></ion-icon>
+      Eliminar clase
+    </ion-button>
+  </div>
+  }
+</ion-content>

@@ -1,0 +1,89 @@
+// Tema de AttendQR: verde azulado (primario) + azul (secundario).
+:root {
+  --ion-font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --ion-color-primary: #0f766e;
+  --ion-color-primary-rgb: 15, 118, 110;
+  --ion-color-primary-contrast: #fff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #0d6962;
+  --ion-color-primary-tint: #288580;
+
+  --ion-color-secondary: #2563eb;
+  --ion-color-secondary-rgb: 37, 99, 235;
+  --ion-color-secondary-contrast: #fff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #2058cf;
+  --ion-color-secondary-tint: #3b73ed;
+
+  --aq-surface: #fff;
+  --aq-muted: #64748b;
+  --aq-border: #e2e8f0;
+  --aq-gradient: linear-gradient(135deg, #0f766e 0%, #2563eb 100%);
+  --ion-background-color: #f4f6fb;
+  --ion-background-color-rgb: 244, 246, 251;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --aq-surface: #1b1f2e;
+    --aq-muted: #94a3b8;
+    --aq-border: #2b3145;
+    --ion-background-color: #0f121c;
+    --ion-background-color-rgb: 15, 18, 28;
+  }
+}
+
+// ---- Componentes compartidos ----
+ion-toolbar {
+  --background: transparent;
+  --border-width: 0;
+}
+
+.page-title {
+  margin: 8px 16px 4px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+  margin: 0 16px 12px;
+  color: var(--aq-muted);
+  font-size: 0.95rem;
+}
+
+.aq-card {
+  margin: 12px 16px;
+  padding: 16px;
+  background: var(--aq-surface);
+  border: 1px solid var(--aq-border);
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgb(15 23 42 / 6%);
+}
+
+.aq-empty {
+  margin: 48px 24px;
+  text-align: center;
+  color: var(--aq-muted);
+
+  ion-icon {
+    font-size: 56px;
+    opacity: 0.5;
+  }
+}
+
+.aq-form {
+  padding: 0 16px 24px;
+
+  ion-input,
+  ion-select {
+    margin-bottom: 14px;
+  }
+}
+
+.aq-error {
+  color: var(--ion-color-danger);
+  font-size: 0.8rem;
+  margin: -8px 4px 12px;
+}

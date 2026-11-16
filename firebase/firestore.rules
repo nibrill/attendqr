@@ -1,0 +1,40 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function roleOf(uid) {
+      return get(/databases/$(database)/documents/users/$(uid)).data.role;
+    }
+
+    match /users/{uid} {
+      allow read, create, update: if signedIn() && request.auth.uid == uid;
+    }
+
+    // Los estudiantes leen una clase por id (al escanear el QR); solo los docentes las crean y gestionan.
+    match /sessions/{sessionId} {
+      allow get: if signedIn();
+      allow list: if signedIn() && resource.data.teacherId == request.auth.uid;
+      allow create: if signedIn()
+        && roleOf(request.auth.uid) == 'teacher'
+        && request.resource.data.teacherId == request.auth.uid;
+      allow update, delete: if signedIn() && resource.data.teacherId == request.auth.uid;
+    }
+
+    // Un registro por estudiante y clase (el id es `${sessionId}_${studentId}`).
+    match /attendance/{recordId} {
+      allow create: if signedIn()
+        && request.resource.data.studentId == request.auth.uid
+        && recordId == request.resource.data.sessionId + '_' + request.auth.uid;
+      allow read: if signedIn() && (
+        resource.data.studentId == request.auth.uid
+        || get(/databases/$(database)/documents/sessions/$(resource.data.sessionId)).data.teacherId == request.auth.uid
+      );
+      allow delete: if signedIn()
+        && get(/databases/$(database)/documents/sessions/$(resource.data.sessionId)).data.teacherId == request.auth.uid;
+    }
+  }
+}

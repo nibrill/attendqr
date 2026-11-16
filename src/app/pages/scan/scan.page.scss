@@ -1,0 +1,46 @@
+video {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  background: #000;
+}
+
+.camera {
+  display: grid;
+  gap: 8px;
+}
+
+.upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  color: var(--ion-color-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+h2 {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+}
+
+.hint {
+  margin: 0 0 12px;
+  color: var(--aq-muted);
+  font-size: 0.9rem;
+}
+
+.manual {
+  margin-top: 12px;
+}
+
+.ok {
+  text-align: center;
+
+  ion-icon {
+    font-size: 64px;
+    color: var(--ion-color-success);
+  }
+}
