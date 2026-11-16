@@ -13,7 +13,7 @@ import type { Attendance } from '../../core/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DatePipe, IonContent, IonHeader, IonIcon, IonToolbar],
   template: `
-    <ion-header [translucent]="true"><ion-toolbar></ion-toolbar></ion-header>
+    <ion-header class="ion-no-border"><ion-toolbar></ion-toolbar></ion-header>
     <ion-content>
       <h1 class="page-title">Mi historial</h1>
       <p class="page-subtitle">{{ records().length }} asistencias registradas.</p>

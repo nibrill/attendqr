@@ -14,6 +14,13 @@
 
 </div>
 
+<p align="center">
+  <img src="docs/screenshots/01-login.png" alt="Inicio de sesión" width="200" />
+  <img src="docs/screenshots/02-clase-qr.png" alt="Clase con código QR y asistentes" width="200" />
+  <img src="docs/screenshots/03-escanear.png" alt="Registrar asistencia" width="200" />
+  <img src="docs/screenshots/04-registrado.png" alt="Asistencia registrada" width="200" />
+</p>
+
 ---
 
 ## 🇪🇸 Español

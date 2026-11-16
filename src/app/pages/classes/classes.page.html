@@ -1,4 +1,4 @@
-<ion-header [translucent]="true"><ion-toolbar></ion-toolbar></ion-header>
+<ion-header class="ion-no-border"><ion-toolbar></ion-toolbar></ion-header>
 
 <ion-content>
   <h1 class="page-title">Mis clases</h1>
@@ -21,7 +21,9 @@
     @if (form.controls.room.touched && form.controls.room.invalid) {
     <p class="aq-error">Indica la sala.</p>
     }
-    <ion-datetime presentation="date-time" formControlName="startsAt" locale="es-CL"></ion-datetime>
+    <ion-datetime presentation="date-time" formControlName="startsAt" locale="es-CL"
+      ><span slot="time-label">Hora</span></ion-datetime
+    >
     <ion-input
       label="Minutos para registrar asistencia"
       labelPlacement="floating"
