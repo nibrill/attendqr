@@ -56,7 +56,7 @@ export class ScanPage {
       const element = this.video()?.nativeElement;
       if (!element) return;
       this.controls = await new BrowserQRCodeReader().decodeFromVideoDevice(undefined, element, (res) => {
-        if (res) void this.handle(res.getText());
+        if (res) void this.handle(res.getText(), true);
       });
     } catch {
       this.stop();
@@ -85,10 +85,11 @@ export class ScanPage {
     await this.handle(this.manualCode);
   }
 
-  private async handle(text: string): Promise<void> {
+  /** `fromCamera`: la cámara lee el mismo QR varias veces por segundo, así que se aplica una pausa. */
+  private async handle(text: string, fromCamera = false): Promise<void> {
     const user = this.auth.user();
-    if (!user || this.handling) return;
-    this.handling = true;
+    if (!user || (fromCamera && this.handling)) return;
+    if (fromCamera) this.handling = true;
     try {
       const payload = decodePayload(text);
       if (!payload) {
@@ -103,8 +104,7 @@ export class ScanPage {
     } catch (e) {
       await this.ui.error(e);
     } finally {
-      // Evita lecturas repetidas del mismo QR mientras la cámara sigue activa.
-      setTimeout(() => (this.handling = false), 2500);
+      if (fromCamera) setTimeout(() => (this.handling = false), 2500);
     }
   }
 }

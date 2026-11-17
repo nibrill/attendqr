@@ -1,6 +1,6 @@
-// Tema de AttendQR: verde azulado (primario) + azul (secundario).
+// Tema de AttendQR: una sola tinta de marca sobre neutros fríos, sin degradados.
 :root {
-  --ion-font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --ion-font-family: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   --ion-color-primary: #0f766e;
   --ion-color-primary-rgb: 15, 118, 110;
@@ -9,67 +9,125 @@
   --ion-color-primary-shade: #0d6962;
   --ion-color-primary-tint: #288580;
 
-  --ion-color-secondary: #2563eb;
-  --ion-color-secondary-rgb: 37, 99, 235;
+  --ion-color-secondary: #1d4ed8;
+  --ion-color-secondary-rgb: 29, 78, 216;
   --ion-color-secondary-contrast: #fff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #2058cf;
-  --ion-color-secondary-tint: #3b73ed;
 
+  --ion-background-color: #f7f8fa;
+  --ion-background-color-rgb: 247, 248, 250;
+  --ion-text-color: #101828;
+  --ion-text-color-rgb: 16, 24, 40;
   --aq-surface: #fff;
-  --aq-muted: #64748b;
-  --aq-border: #e2e8f0;
-  --aq-gradient: linear-gradient(135deg, #0f766e 0%, #2563eb 100%);
-  --ion-background-color: #f4f6fb;
-  --ion-background-color-rgb: 244, 246, 251;
+  --aq-text: #101828;
+  --aq-muted: #667085;
+  --aq-border: #e4e7ec;
+  --aq-radius: 14px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --aq-surface: #1b1f2e;
-    --aq-muted: #94a3b8;
-    --aq-border: #2b3145;
-    --ion-background-color: #0f121c;
-    --ion-background-color-rgb: 15, 18, 28;
+    --ion-background-color: #0c0e14;
+    --ion-background-color-rgb: 12, 14, 20;
+    --ion-text-color: #f2f4f7;
+    --ion-text-color-rgb: 242, 244, 247;
+    --aq-surface: #151922;
+    --aq-text: #f2f4f7;
+    --aq-muted: #98a2b3;
+    --aq-border: #272d3a;
+    --ion-color-primary: #288580;
   }
 }
 
-// ---- Componentes compartidos ----
+// ---- Base ----
+ion-content {
+  --background: var(--ion-background-color);
+}
+
 ion-toolbar {
-  --background: transparent;
+  --background: var(--ion-background-color);
   --border-width: 0;
 }
 
+ion-tab-bar {
+  --background: var(--aq-surface);
+  --border: 1px solid var(--aq-border);
+}
+
+ion-button {
+  --border-radius: 10px;
+  text-transform: none;
+  font-weight: 600;
+  letter-spacing: 0;
+  --box-shadow: none;
+}
+
+ion-input {
+  --border-radius: 10px;
+}
+
+ion-segment {
+  --background: var(--aq-border);
+  border-radius: 10px;
+}
+
+ion-segment-button {
+  text-transform: none;
+  font-weight: 600;
+  letter-spacing: 0;
+  --indicator-color: var(--aq-surface);
+  --indicator-box-shadow: 0 1px 2px rgb(16 24 40 / 10%);
+  --border-radius: 8px;
+  --color-checked: var(--aq-text);
+  --color: var(--aq-muted);
+  --indicator-height: 38px;
+  min-height: 38px;
+}
+
+ion-segment-button::part(indicator-background) {
+  border-radius: 8px;
+}
+
+ion-searchbar {
+  --box-shadow: none;
+  --border-radius: 10px;
+  --background: var(--aq-surface);
+  --border: 1px solid var(--aq-border);
+}
+
+// ---- Componentes compartidos ----
 .page-title {
-  margin: 8px 16px 4px;
-  font-size: 1.6rem;
-  font-weight: 800;
+  margin: 12px 16px 4px;
+  font-size: 1.5rem;
+  font-weight: 650;
   letter-spacing: -0.02em;
+  color: var(--aq-text);
 }
 
 .page-subtitle {
-  margin: 0 16px 12px;
+  margin: 0 16px 16px;
   color: var(--aq-muted);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
 }
 
 .aq-card {
-  margin: 12px 16px;
+  margin: 10px 16px;
   padding: 16px;
   background: var(--aq-surface);
   border: 1px solid var(--aq-border);
-  border-radius: 18px;
-  box-shadow: 0 6px 18px rgb(15 23 42 / 6%);
+  border-radius: var(--aq-radius);
 }
 
 .aq-empty {
-  margin: 48px 24px;
+  margin: 56px 32px;
   text-align: center;
   color: var(--aq-muted);
+  font-size: 0.9rem;
 
   ion-icon {
-    font-size: 56px;
-    opacity: 0.5;
+    font-size: 40px;
+    opacity: 0.55;
   }
 }
 
@@ -86,4 +144,8 @@ ion-toolbar {
   color: var(--ion-color-danger);
   font-size: 0.8rem;
   margin: -8px 4px 12px;
+}
+
+ion-header.header-md::after {
+  display: none;
 }

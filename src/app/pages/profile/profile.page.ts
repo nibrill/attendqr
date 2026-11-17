@@ -41,7 +41,7 @@ import { AuthService } from '../../core/auth.service';
       color: #fff;
       font-size: 1.8rem;
       font-weight: 700;
-      background: var(--aq-gradient);
+      background: var(--ion-color-primary);
     }
     h2 {
       margin: 12px 0 2px;

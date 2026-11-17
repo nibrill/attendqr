@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📲 AttendQR
+# AttendQR
 
 **Control de asistencia con códigos QR · QR-based class attendance**
 
@@ -11,11 +11,11 @@
 [![CI](https://github.com/nibrill/attendqr/actions/workflows/ci.yml/badge.svg)](https://github.com/nibrill/attendqr/actions/workflows/ci.yml)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-### [▶ Probar la demo en vivo](https://nibrill.github.io/attendqr/) · [Usar como plantilla](https://github.com/nibrill/attendqr/generate)
+### [Probar la demo en vivo](https://nibrill.github.io/attendqr/) · [Usar como plantilla](https://github.com/nibrill/attendqr/generate)
 
 <img src="docs/demo.gif" alt="Demostración de AttendQR" width="260" />
 
-[🇪🇸 Español](#-español) · [🇬🇧 English](#-english)
+[Español](#español) · [English](#english)
 
 </div>
 
@@ -28,13 +28,13 @@
 
 ---
 
-## 🇪🇸 Español
+## Español
 
 AttendQR elimina las listas de papel: el **docente** crea una clase y proyecta un código QR; los **estudiantes** lo escanean con su teléfono y la asistencia queda registrada al instante, con hora y sin duplicados.
 
 > Proyecto universitario rediseñado desde cero (antes *BrillPro*): arquitectura limpia, interfaz moderna y backend intercambiable.
 
-### ✨ Características
+### Características
 
 - Roles **docente** y **estudiante**, con registro, inicio de sesión y recuperación de contraseña.
 - El docente crea clases con asignatura, sala, horario y **ventana de registro** configurable.
@@ -46,7 +46,7 @@ AttendQR elimina las listas de papel: el **docente** crea una clase y proyecta u
 - **PWA instalable**: se puede agregar a la pantalla de inicio y abre sin conexión.
 - **Modo demo** sin configuración (datos en el navegador) o **Firebase Auth + Firestore** con reglas incluidas.
 
-### 🧱 Arquitectura
+### Arquitectura
 
 ```
 src/app
@@ -57,9 +57,9 @@ src/app
 └── pages/           # login · tabs · classes · class-detail · scan · history · profile
 ```
 
-Angular 22 con componentes *standalone*, *signals*, `OnPush`, rutas con *lazy loading*, TypeScript estricto y pruebas con Vitest.
+Interfaz con tipografía Inter empaquetada, tema claro/oscuro y una sola tinta de marca. Angular 22 con componentes *standalone*, *signals*, `OnPush`, rutas con *lazy loading*, TypeScript estricto y pruebas con Vitest.
 
-### 🚀 Inicio rápido
+### Inicio rápido
 
 ```bash
 git clone https://github.com/nibrill/attendqr.git
@@ -72,7 +72,7 @@ Abre `http://localhost:4200`. Cuentas de ejemplo (contraseña `demo1234`): `doce
 
 **Probar el flujo completo:** inicia sesión como docente → crea una clase → copia el QR; en otra pestaña inicia sesión como estudiante → «Escanear» → sube una captura del QR. El código rota cada 20 segundos, así que hay que escanear el que está en pantalla.
 
-### 🔥 Usar Firebase (opcional)
+### Usar Firebase (opcional)
 
 1. Crea un proyecto en [Firebase Console](https://console.firebase.google.com) y activa **Authentication (correo/contraseña)** y **Firestore**.
 2. Completa `firebase` en `src/environments/environment.ts` (ver `environment.example.ts`).
@@ -82,13 +82,13 @@ Abre `http://localhost:4200`. Cuentas de ejemplo (contraseña `demo1234`): `doce
 npx firebase-tools deploy --only firestore:rules
 ```
 
-### 🔐 Cómo funciona el QR rotativo
+### Cómo funciona el QR rotativo
 
 Cada clase tiene un secreto aleatorio. El QR no lo muestra: contiene un token derivado del secreto y de la ventana de tiempo actual (SHA-256), que se regenera cada 20 segundos. Al registrar asistencia se acepta solo el token vigente o el inmediatamente anterior.
 
 > **Limitación conocida:** la validación se hace en el cliente. Con Firebase, un estudiante con conocimientos técnicos podría leer el secreto de la clase desde Firestore. Para un uso real con control estricto, mueve `checkIn` a una Cloud Function y deja el secreto fuera del alcance de los estudiantes.
 
-### 📱 App móvil
+### App móvil
 
 ```bash
 npm run build
@@ -98,7 +98,7 @@ npx cap sync && npx cap open android
 
 > La cámara requiere HTTPS (o `localhost`) en el navegador y el permiso de cámara en el dispositivo.
 
-### 🧩 Úsalo como base para tu proyecto
+### Úsalo como base para tu proyecto
 
 Este repositorio es una **plantilla**: pulsa [**Use this template**](https://github.com/nibrill/attendqr/generate) para crear tu propia copia y luego:
 
@@ -110,7 +110,7 @@ Este repositorio es una **plantilla**: pulsa [**Use this template**](https://git
 
 Las contribuciones son bienvenidas: revisa [CONTRIBUTING.md](CONTRIBUTING.md).
 
-### 🛠 Scripts
+### Scripts
 
 | Comando | Descripción |
 | --- | --- |
@@ -118,16 +118,17 @@ Las contribuciones son bienvenidas: revisa [CONTRIBUTING.md](CONTRIBUTING.md).
 | `npm run build` | Compilación de producción |
 | `npm test` | Pruebas unitarias (Vitest) |
 | `npm run lint` | ESLint |
+| `npm run test:e2e` | Pruebas end-to-end con Playwright (el servidor de desarrollo se levanta solo) |
 
 ---
 
-## 🇬🇧 English
+## English
 
 AttendQR replaces paper attendance sheets: the **teacher** creates a class and shows a QR code; **students** scan it with their phones and attendance is recorded instantly, timestamped and duplicate-free.
 
 > A university project rebuilt from scratch (formerly *BrillPro*).
 
-### ✨ Features
+### Features
 
 - **Teacher** and **student** roles with sign up, sign in and password reset.
 - Classes with course, room, start time and a configurable **check-in window**.
@@ -137,7 +138,7 @@ AttendQR replaces paper attendance sheets: the **teacher** creates a class and s
 - Personal attendance history; one check-in per student and class.
 - **Zero-config demo mode** or **Firebase Auth + Firestore** with included security rules.
 
-### 🚀 Quick start
+### Quick start
 
 ```bash
 git clone https://github.com/nibrill/attendqr.git
@@ -148,10 +149,10 @@ npm start
 
 Demo accounts (password `demo1234`): `docente@demo.cl` (teacher) and `alumno@demo.cl` (student).
 
-### 🧩 Use it as a starter
+### Use it as a starter
 
 Click [**Use this template**](https://github.com/nibrill/attendqr/generate), then rename the app (`package.json`, `capacitor.config.ts`), restyle it in `src/theme/variables.scss`, and plug in your own backend by implementing the abstract `Backend` class (`src/app/core/backend.ts`) and registering it in `src/main.ts`. Try the [live demo](https://nibrill.github.io/attendqr/) first.
 
-### 📄 License
+### License
 
 [MIT](LICENSE) © Nicolás Brill
